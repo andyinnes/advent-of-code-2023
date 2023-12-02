@@ -23,7 +23,7 @@ fn game_fails<'a>(game: &'a str, limits: &HashMap<&str, i32>, max_counter: &mut 
 }
 
 fn solve_games(game_row: &str, limits: &HashMap<&str, i32>) -> (bool, i32) {
-    let mut split = game_row.split(";");
+    let split = game_row.split(";");
     let mut max_values = HashMap::from([
         ("red", 1),
         ("green", 1),
@@ -55,7 +55,6 @@ pub fn solution() -> String {
             result_1 += game_id;
         }
         result_2 += game_stats.1;
-        println!("{game_id}: {}", game_stats.1);
     }
     format!("Problem 1: {result_1}\nProblem 2: {result_2}")
 }

@@ -1,7 +1,3 @@
-use std::fs;
-
-const FILE_NAME: &str = "input.txt";
-
 fn convert_to_nums(val: String) -> String {
     let mut output: String = String::from("");
     for (i, c) in val.chars().enumerate() {
@@ -44,15 +40,15 @@ fn get_value(mut val: String, replace: bool) -> i32 {
     out_int
 }
 
-fn main() {
-    let contents = fs::read_to_string(FILE_NAME)
-        .expect("Should be able to read file");
+pub fn solution() -> String {
+    let contents = include_str!("input.txt");
     let mut result_1 = 0;
     let mut result_2 = 0;
     for line in contents.lines() {
         result_1 += get_value(line.to_string(), false);
         result_2 += get_value(line.to_string(), true);
     }
-    println!("Problem 1: {result_1}");
-    println!("Problem 2: {result_2}");
+    let prob_1 = format!("Problem 1: {result_1}");
+    let prob_2 = format!("Problem 2: {result_2}");
+    format!("{prob_1}\n{prob_2}")
 }

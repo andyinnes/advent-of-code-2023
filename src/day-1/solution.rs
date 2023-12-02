@@ -52,3 +52,7 @@ pub fn solution() -> String {
     let prob_2 = format!("Problem 2: {result_2}");
     format!("{prob_1}\n{prob_2}")
 }
+
+fn main() {
+    println!("{}", solution());
+}

@@ -83,7 +83,6 @@ fn gear_iter(lines: &mut Vec<Vec<char>>, current_row: usize, max_row: usize) -> 
         let c: char = lines[current_row][i];
         let mut result = 0;
         if c == '*' {
-            println!("Looking at row {current_row} col {i}");
             // Defaults for the current row
             if i != 0 {
                 result = include_number(&mut lines[current_row], i - 1, row_length);

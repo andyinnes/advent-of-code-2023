@@ -81,35 +81,34 @@ fn gear_iter(lines: &mut Vec<Vec<char>>, current_row: usize, max_row: usize) -> 
     for i in 0..row_length {
         let mut neighbours: Vec<i32> = vec![];
         let c: char = lines[current_row][i];
-        let mut result = 0;
         if c == '*' {
             // Defaults for the current row
             if i != 0 {
-                result = include_number(&mut lines[current_row], i - 1, row_length);
+                let result = include_number(&mut lines[current_row], i - 1, row_length);
                 if result != 0 {
                     neighbours.push(result);
                 }
             }
             if i < row_length - 1 {
-                result = include_number(&mut lines[current_row], i + 1, row_length);
+                let result = include_number(&mut lines[current_row], i + 1, row_length);
                 if result != 0 {
                     neighbours.push(result);
                 }
             }
             // For row above
             if current_row > 0 {
-                result = include_number(&mut lines[current_row - 1], i, row_length);
+                let result = include_number(&mut lines[current_row - 1], i, row_length);
                 if result != 0 {
                     neighbours.push(result);
                 }   
                 if i != 0 {
-                    result = include_number(&mut lines[current_row - 1], i - 1, row_length);
+                    let result = include_number(&mut lines[current_row - 1], i - 1, row_length);
                     if result != 0 {
                         neighbours.push(result);
                     }
                 }
                 if i < row_length - 1 {
-                    result = include_number(&mut lines[current_row - 1], i + 1, row_length);
+                    let result = include_number(&mut lines[current_row - 1], i + 1, row_length);
                     if result != 0 {
                         neighbours.push(result);
                     }
@@ -117,18 +116,18 @@ fn gear_iter(lines: &mut Vec<Vec<char>>, current_row: usize, max_row: usize) -> 
             }
             // For row below
             if max_row > 0 && current_row < max_row {
-                result = include_number(&mut lines[current_row + 1], i, row_length);
+                let result = include_number(&mut lines[current_row + 1], i, row_length);
                 if result != 0 {
                     neighbours.push(result);
                 }
                 if i != 0 {
-                    result = include_number(&mut lines[current_row + 1], i - 1, row_length);
+                    let result = include_number(&mut lines[current_row + 1], i - 1, row_length);
                     if result != 0 {
                         neighbours.push(result);
                     }
                 }
                 if i < row_length - 1 {
-                    result = include_number(&mut lines[current_row + 1], i + 1, row_length);
+                    let result = include_number(&mut lines[current_row + 1], i + 1, row_length);
                     if result != 0 {
                         neighbours.push(result);
                     }

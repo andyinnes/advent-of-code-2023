@@ -1,12 +1,11 @@
 use std::env;
 use chrono::offset::Local;
 mod day_1;
-#[path = "day-2/solution.rs"] mod day_2;
-#[path = "day-3/solutionv2.rs"] mod day_3;
-#[path = "day-4/solution.rs"] mod day_4;
-#[path = "day-5/solution.rs"] mod day_5_slow;
-#[path = "day-5/range_solution.rs"] mod day_5;
-#[path = "day-6/solution.rs"] mod day_6;
+mod day_2;
+mod day_3;
+mod day_4;
+mod day_5;
+mod day_6;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -20,13 +19,15 @@ fn main() {
     } else if day == "2" {
         println!("{}", day_2::solution());
     } else if day == "3" {
-        println!("{}", day_3::solution());
+        println!("{}", day_3::fast_solution());
+    } else if day == "3.5" {
+        println!("{}", day_3::struct_solution());
     } else if day == "4" {
         println!("{}", day_4::solution());
     } else if day == "5" {
         println!("{}", day_5::solution());
     } else if day == "5.5" {
-        println!("{}", day_5_slow::solution());
+        println!("{}", day_5::slow_solution());
     } else if day == "6" {
         println!("{}", day_6::solution());
     } else {

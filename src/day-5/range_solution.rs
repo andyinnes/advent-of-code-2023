@@ -203,7 +203,6 @@ fn problem_2(seeds: &Vec<i64>, seed_maps: &SeedMapsTuple) -> i64 {
     let max_lower_index: usize = seeds.len() - 1;
     for i in 0..max_lower_index {
         // Lazy approach with the indices
-        println!("Started problem 2 block {i}");
         let lower = 2 * i;
         let upper = lower + 1;
         if lower >= max_lower_index {

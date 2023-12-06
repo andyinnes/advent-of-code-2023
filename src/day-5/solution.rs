@@ -125,6 +125,7 @@ fn problem_2(seeds: &Vec<i64>, seed_maps: &SeedMaps) -> i64 {
     let mut result = i64::MAX;
     let max_lower_index = seeds.len() - 1;
     for i in 0..max_lower_index {
+        println!("Started problem 2 block {i}");
         // Lazy approach with the indices
         let lower = 2 * i;
         let upper = lower + 1;
@@ -148,7 +149,6 @@ pub fn solution() -> String {
     let remaining_lines = lines_iter.collect();
     let seed_maps = parse_seed_maps(&remaining_lines);
     let result_1 = problem_1(&seeds, &seed_maps);
-    println!("Done prob 1");
     let result_2 = problem_2(&seeds, &seed_maps);
     format!("Problem 1: {result_1}\nProblem 2: {result_2}")
 }

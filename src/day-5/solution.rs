@@ -1,5 +1,3 @@
-// use std::collections::HashMap;
-
 struct SingleMap {
     start: i64,
     end: i64,
@@ -14,7 +12,6 @@ impl SingleMap {
 
 trait ShiftValue {
     fn shift_value(&self, value: i64) -> i64;
-    // fn concatenate_shifts(&self, other: Self) -> Self;
 }
 
 impl ShiftValue for Vec<SingleMap> {
@@ -26,49 +23,6 @@ impl ShiftValue for Vec<SingleMap> {
         }
         value
     }
-
-    // fn concatenate_shifts(&self, other: Self) -> Self {
-    //     // Idea: Map the move the current shifts into a hashmap, key give the value of the shift from there to the next key.
-    //     // Then move out into a new shift vector
-    //     let mut shift_values: HashMap<i64, i64> = HashMap::new();
-    //     for map in self {
-    //         *shift_values.entry(map.start).or_insert(0) += map.shift;
-    //         shift_values.entry(map.end).or_insert(0);
-    //     }
-    //     for map in other {
-    //         *shift_values.entry(map.start).or_insert(0) += map.shift;
-    //         shift_values.entry(map.end).or_insert(0);
-    //     }
-    //     let mut output: Vec<SingleMap> = vec![];
-    //     let mut current_start = -1;
-    //     let mut current_shift = 0;
-    //     for (index, shift) in shift_values.into_iter() {
-    //         if current_start != -1 {
-    //             if shift == current_shift {
-    //                 continue;
-    //             }
-    //             if current_shift != 0 {
-    //                 // If condition should always be true but just in case
-    //                 output.push(SingleMap { start: current_start, end: index, shift: current_shift });
-    //             }
-    //             if shift == 0 {
-    //                 current_start = -1;
-    //             } else {
-    //                 current_start = index;
-    //             }
-    //             current_shift = shift;
-    //         } else {
-    //             if current_shift != 0 {
-    //                 panic!("");
-    //             }
-    //             if shift != 0 {
-    //                 current_shift = shift;
-    //                 current_start = index;
-    //             }
-    //         }
-    //     }
-    //     output
-    // }
 }
 
 struct SeedMaps {
@@ -93,10 +47,6 @@ impl SeedMaps {
         output = self.humidity_to_location.shift_value(output);
         output
     }
-
-    // fn concatenate(&self) -> Vec<SingleMap> {
-    //     let o1 = self.seed_to_soil.concatenate_shifts(self.)
-    // }
 }
 
 fn get_seeds(line: String) -> Vec<i64> {
@@ -183,7 +133,6 @@ fn problem_2(seeds: &Vec<i64>, seed_maps: &SeedMaps) -> i64 {
         }
         let start = seeds[lower];
         let end = start + seeds[upper];
-        println!("Range length {}", seeds[upper]);
         for seed_value in start..end {
             result = result.min(seed_maps.map_value(seed_value));
         }

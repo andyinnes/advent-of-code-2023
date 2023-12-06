@@ -1,9 +1,11 @@
 use std::env;
+use chrono::offset::Local;
 #[path = "day-1/solution.rs"] mod day_1;
 #[path = "day-2/solution.rs"] mod day_2;
 #[path = "day-3/solutionv2.rs"] mod day_3;
 #[path = "day-4/solution.rs"] mod day_4;
 #[path = "day-5/solution.rs"] mod day_5;
+#[path = "day-5/range_solution.rs"] mod day_5_other;
 #[path = "day-6/solution.rs"] mod day_6;
 
 fn main() {
@@ -12,6 +14,7 @@ fn main() {
         panic!("Must supply problem argument");
     }
     let day = &args[1];
+    let start_dt = Local::now();
     if day == "1" {
         println!("{}", day_1::solution());
     } else if day == "2" {
@@ -22,9 +25,13 @@ fn main() {
         println!("{}", day_4::solution());
     } else if day == "5" {
         println!("{}", day_5::solution());
+    } else if day == "5.5" {
+        println!("{}", day_5_other::solution());
     } else if day == "6" {
         println!("{}", day_6::solution());
     } else {
         println!("Unknown day input {day}");
     }
+    let dur = Local::now() - start_dt;
+    println!("Duration: {dur}");
 }

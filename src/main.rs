@@ -1,6 +1,6 @@
 use std::env;
 use chrono::offset::Local;
-#[path = "day-1/solution.rs"] mod day_1;
+mod day_1;
 #[path = "day-2/solution.rs"] mod day_2;
 #[path = "day-3/solutionv2.rs"] mod day_3;
 #[path = "day-4/solution.rs"] mod day_4;

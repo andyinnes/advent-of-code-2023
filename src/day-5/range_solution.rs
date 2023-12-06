@@ -1,3 +1,5 @@
+use std::iter::Iterator;
+
 #[derive(Eq, PartialEq, PartialOrd, Ord, Clone, Copy)]
 struct Range { start: i64, end: i64 }
 
@@ -105,30 +107,25 @@ impl ShiftValue for Vec<SingleMap> {
     }
 }
 
-struct SeedMapsTuple (Vec<SingleMap>, Vec<SingleMap>, Vec<SingleMap>, Vec<SingleMap>, Vec<SingleMap>, Vec<SingleMap>, Vec<SingleMap>);
+trait MapValues {
+    fn map_value(&self, value: i64) -> i64;
+    fn map_range(&self, range: Range) -> Vec<Range>;
+}
 
-impl SeedMapsTuple {
+impl<T> MapValues for Vec<T> where T: ShiftValue {
     fn map_value(&self, value: i64) -> i64 {
         let mut output: i64 = value;
-        output = self.0.shift_value(output);
-        output = self.1.shift_value(output);
-        output = self.2.shift_value(output);
-        output = self.3.shift_value(output);
-        output = self.4.shift_value(output);
-        output = self.5.shift_value(output);
-        output = self.6.shift_value(output);
+        for map in self {
+            output = map.shift_value(output);
+        }
         output
     }
 
     fn map_range(&self, range: Range) -> Vec<Range> {
         let mut output: Vec<Range> = vec![range];
-        output = self.0.map_ranges(output);
-        output = self.1.map_ranges(output);
-        output = self.2.map_ranges(output);
-        output = self.3.map_ranges(output);
-        output = self.4.map_ranges(output);
-        output = self.5.map_ranges(output);
-        output = self.6.map_ranges(output);
+        for map in self {
+            output = map.map_ranges(output);
+        }
         output
     }
 }
@@ -179,7 +176,7 @@ fn create_mapping(line_iterable: &Vec<&str>, start: usize) -> (Vec<SingleMap>, u
     (new_map, end)
 }
 
-fn parse_seed_maps(line_iterable: &Vec<&str>) -> SeedMapsTuple {
+fn parse_seed_maps(line_iterable: &Vec<&str>) -> Vec<Vec<SingleMap>> {
     let (map1, end1) = create_mapping(line_iterable, 0);
     let (map2, end2) = create_mapping(line_iterable, end1);
     let (map3, end3) = create_mapping(line_iterable, end2);
@@ -187,10 +184,10 @@ fn parse_seed_maps(line_iterable: &Vec<&str>) -> SeedMapsTuple {
     let (map5, end5) = create_mapping(line_iterable, end4);
     let (map6, end6) = create_mapping(line_iterable, end5);
     let (map7, _) = create_mapping(line_iterable, end6);
-    SeedMapsTuple (map1, map2, map3, map4, map5, map6, map7)
+    vec![map1, map2, map3, map4, map5, map6, map7]
 }
 
-fn problem_1(seeds: &Vec<i64>, seed_maps: &SeedMapsTuple) -> i64 {
+fn problem_1(seeds: &Vec<i64>, seed_maps: &Vec<Vec<SingleMap>>) -> i64 {
     let mut result = i64::MAX;
     for seed in seeds {
         result = result.min(seed_maps.map_value(*seed));
@@ -198,7 +195,7 @@ fn problem_1(seeds: &Vec<i64>, seed_maps: &SeedMapsTuple) -> i64 {
     result
 }
 
-fn problem_2(seeds: &Vec<i64>, seed_maps: &SeedMapsTuple) -> i64 {
+fn problem_2(seeds: &Vec<i64>, seed_maps: &Vec<Vec<SingleMap>>) -> i64 {
     let mut result = i64::MAX;
     let max_lower_index: usize = seeds.len() - 1;
     for i in 0..max_lower_index {

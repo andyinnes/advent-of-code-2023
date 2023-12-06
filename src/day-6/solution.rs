@@ -4,7 +4,7 @@ fn parse(contents: &str) -> (Vec<u64>, Vec<u64>) {
     let mut times = vec![];
     let mut records = vec![];
     for line in contents.lines() {
-        let mut new_line = String::new();
+        let mut new_line: String;
         let is_time = line.starts_with("Time:");
         if is_time {
             new_line = line.replace("Time:", "");

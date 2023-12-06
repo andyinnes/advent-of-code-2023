@@ -4,8 +4,8 @@ use chrono::offset::Local;
 #[path = "day-2/solution.rs"] mod day_2;
 #[path = "day-3/solutionv2.rs"] mod day_3;
 #[path = "day-4/solution.rs"] mod day_4;
-#[path = "day-5/solution.rs"] mod day_5;
-#[path = "day-5/range_solution.rs"] mod day_5_other;
+#[path = "day-5/solution.rs"] mod day_5_slow;
+#[path = "day-5/range_solution.rs"] mod day_5;
 #[path = "day-6/solution.rs"] mod day_6;
 
 fn main() {
@@ -26,7 +26,7 @@ fn main() {
     } else if day == "5" {
         println!("{}", day_5::solution());
     } else if day == "5.5" {
-        println!("{}", day_5_other::solution());
+        println!("{}", day_5_slow::solution());
     } else if day == "6" {
         println!("{}", day_6::solution());
     } else {

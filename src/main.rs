@@ -8,6 +8,7 @@ mod day_5;
 mod day_6;
 mod day_7;
 mod day_8;
+mod day_9;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -36,6 +37,8 @@ fn main() {
         println!("{}", day_7::solution());
     } else if day == "8" {
         println!("{}", day_8::solution());
+    } else if day == "9" {
+        println!("{}", day_9::solution());
     } else {
         println!("Unknown day input {day}");
     }

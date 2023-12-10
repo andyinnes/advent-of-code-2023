@@ -26,28 +26,6 @@ impl CoordType {
     fn allow_right(&self) -> bool {
         [CoordType::Dash, CoordType::F, CoordType::L, CoordType::Start].contains(self)
     }
-    fn print(&self) -> String {
-        let out = if self == &CoordType::Pipe {
-            "|"
-        } else if self == &CoordType::Dash {
-            "-"
-        } else if self == &CoordType::L {
-            "L"
-        } else if self == &CoordType::J {
-            "J"
-        } else if self == &CoordType::F {
-            "F"
-        } else if self == &CoordType::Seven {
-            "7"
-        } else if self == &CoordType::Start {
-            "S"
-        } else if self == &CoordType::Empty {
-            "."
-        } else {
-            "#"
-        };
-        out.to_string()
-    }
 }
 
 #[derive(Hash, Debug, Eq, PartialEq, Clone, Copy)]

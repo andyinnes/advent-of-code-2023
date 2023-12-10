@@ -1,5 +1,6 @@
 use std::env;
 use chrono::offset::Local;
+mod year2022;
 mod year2023;
 
 fn main() {
@@ -16,6 +17,8 @@ fn main() {
     let start_dt = Local::now();
     if year == "2023" {
         println!("{}", year2023::runner(day));
+    } else if year == "2022" {
+        println!("{}", year2022::runner(day));
     } else {
         println!("Unknown year input {year}");
     }

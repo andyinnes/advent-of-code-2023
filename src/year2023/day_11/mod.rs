@@ -3,14 +3,13 @@ use itertools::Itertools;
 
 #[derive(Clone, Copy, Eq, PartialEq)]
 enum SpaceType {
-    Galaxy(i32),
+    Galaxy,
     Empty,
     Expanded,
 }
 
 fn parse(contents: &str) -> Vec<Vec<SpaceType>> {
     let mut output: Vec<Vec<SpaceType>> = vec![];
-    let mut galaxy_count = 0;
     let base_col_count = contents.lines().next().unwrap().len();
     let mut columns_without_galaxy: HashSet<usize> = HashSet::from_iter(0..base_col_count);
     for line in contents.lines() {
@@ -21,8 +20,7 @@ fn parse(contents: &str) -> Vec<Vec<SpaceType>> {
                 row.push(SpaceType::Empty);
             } else {
                 null_row = false;
-                row.push(SpaceType::Galaxy(galaxy_count));
-                galaxy_count += 1;
+                row.push(SpaceType::Galaxy);
                 columns_without_galaxy.remove(&col);
             }
         }
@@ -46,10 +44,9 @@ fn galaxies(map: &Vec<Vec<SpaceType>>) -> Vec<(usize, usize)> {
     let mut output = vec![];
     for (r, row) in map.iter().enumerate() {
         for (c, col) in row.iter().enumerate() {
-            match col {
-                SpaceType::Galaxy(_) => output.push((r, c)),
-                _ => continue
-            };
+            if *col == SpaceType::Galaxy {
+                output.push((r, c));
+            }
         }
     }
     output

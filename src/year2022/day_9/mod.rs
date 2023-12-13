@@ -134,33 +134,6 @@ fn parse(contents: &str) -> Vec<Step> {
     output
 }
 
-fn print(status: &Vec<Coord>) -> () {
-    let start = Coord {x: 0, y: 0};
-    for y in -10..=10 {
-        for x in -20..=20 {
-            let c = Coord { x, y: -y };
-            if c == status[0] {
-                print!("H");
-            } else if status.contains(&c) {
-                for (i, v) in status.iter().enumerate() {
-                    if i != 0 {
-                        if c == *v {
-                            print!("{i}");
-                            break;
-                        }
-                    }
-                }
-            } else if c == start {
-                print!("s");
-            } else {
-                print!(".");
-            }
-        }
-        print!("\n");
-    }
-    println!("");
-}
-
 fn problem_loop(steps: &Vec<Step>, tail_length: usize) -> usize {
     let mut status = vec![Coord { x: 0, y: 0 }; tail_length + 1];
     let mut visited: HashSet<Coord> = HashSet::from([status[0]]);

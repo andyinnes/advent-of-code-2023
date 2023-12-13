@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-#[derive(Debug)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 enum Direction {
     Up,
     Down,
@@ -20,6 +20,7 @@ impl From<&str> for Direction {
     }
 }
 
+#[derive(PartialEq, Eq)]
 struct Step {
     direction: Direction,
     count: i32,
@@ -34,20 +35,29 @@ struct Coord {
 impl Coord {
     fn apply_step(&self, step: &Step) -> Self {
         match step.direction {
-            Direction::Up => Coord { y: self.y + step.count, ..*self },
-            Direction::Down => Coord { y: self.y - step.count, ..*self },
-            Direction::Left => Coord { x: self.x - step.count, ..*self },
-            Direction::Right => Coord { x: self.x + step.count, ..*self },
+            Direction::Up => Coord { y: self.y + 1, ..*self },
+            Direction::Down => Coord { y: self.y - 1, ..*self },
+            Direction::Left => Coord { x: self.x - 1, ..*self },
+            Direction::Right => Coord { x: self.x + 1, ..*self },
         }
     }
 
-    fn follow(&self, tail: &Self) -> Vec<Self> {
+    fn follow(&self, tail: &Self) -> Vec<Coord> {
         // Follow the head and return a list of visited nodes
         let mut visited = vec![];
         let delta = (self.x - tail.x, self.y - tail.y);
         let delta_abs = (delta.0.abs(), delta.1.abs());
         if delta_abs.0.max(delta_abs.1) == 1 {
             return vec![];
+        } else if delta == (2, 2) {
+            // idk this isn't great
+            visited.push(Coord { x: self.x - 1, y: self.y - 1 });
+        } else if delta == (-2, 2) {
+            visited.push(Coord { x: self.x + 1, y: self.y - 1 });
+        } else if delta == (2, -2) {
+            visited.push(Coord { x: self.x - 1, y: self.y + 1 });
+        } else if delta == (-2, -2) {
+            visited.push(Coord { x: self.x + 1, y: self.y + 1 });
         } else if delta.0 == 0 {
             if delta.1 < 0 {
                 for y_delta in delta.1 + 1..=-1 {
@@ -91,22 +101,23 @@ impl Coord {
     }
 }
 
-#[derive(Clone, Copy)]
-struct Status {
-    head: Coord,
-    tail: Coord,
+trait ApplySteps {
+    fn apply_step(&mut self, step: &Step, visited: &mut HashSet<Coord>) -> ();
 }
 
-impl Status {
+impl ApplySteps for Vec<Coord> {
     fn apply_step(&mut self, step: &Step, visited: &mut HashSet<Coord>) -> () {
-        let new_head = self.head.apply_step(&step);
-        let newly_visited = new_head.follow(&self.tail);
-        for point in &newly_visited {
-            visited.insert(*point);
-        }
-        self.head = new_head;
-        if newly_visited.len() > 0 {
-            self.tail = newly_visited[newly_visited.len() - 1];
+        for _ in 0..step.count {
+            let substep = Step { direction: step.direction.clone(), count: 1 };
+            self[0] = self[0].apply_step(&substep);
+            for i in 1..self.len() {
+                let new_i = self[i - 1].follow(&self[i]);
+                if new_i.len() == 0 {
+                    break;
+                }
+                self[i] = new_i[0];
+            }
+            visited.insert(self[self.len() - 1]);
         }
     }
 }
@@ -123,15 +134,22 @@ fn parse(contents: &str) -> Vec<Step> {
     output
 }
 
-fn print(status: &Status) -> () {
+fn print(status: &Vec<Coord>) -> () {
     let start = Coord {x: 0, y: 0};
-    for y in 0..5 {
-        for x in 0..6 {
-            let c = Coord { x, y: 4 - y };
-            if c == status.head {
+    for y in -10..=10 {
+        for x in -20..=20 {
+            let c = Coord { x, y: -y };
+            if c == status[0] {
                 print!("H");
-            } else if c == status.tail {
-                print!("T");
+            } else if status.contains(&c) {
+                for (i, v) in status.iter().enumerate() {
+                    if i != 0 {
+                        if c == *v {
+                            print!("{i}");
+                            break;
+                        }
+                    }
+                }
             } else if c == start {
                 print!("s");
             } else {
@@ -143,40 +161,17 @@ fn print(status: &Status) -> () {
     println!("");
 }
 
-fn visits(status: &HashSet<Coord>) -> () {
-    for y in 0..5 {
-        for x in 0..6 {
-            let c = Coord { x, y: 4 - y };
-            if status.contains(&c) {
-                print!("#");
-            } else {
-                print!(".");
-            }
-        }
-        print!("\n");
-    }
-    println!("");
-}
-
-fn problem_1(steps: &Vec<Step>) -> usize {
-    let mut status = Status {
-        head: Coord { x: 0, y: 0 },
-        tail: Coord { x: 0, y: 0 },
-    };
-    let mut visited: HashSet<Coord> = HashSet::from([status.tail]);
-    print(&status);
-    for step in steps {
-        // println!("{:?} -> {}", step.direction, step.count);
+fn problem_loop(steps: &Vec<Step>, tail_length: usize) -> usize {
+    let mut status = vec![Coord { x: 0, y: 0 }; tail_length + 1];
+    let mut visited: HashSet<Coord> = HashSet::from([status[0]]);
+    for step in steps.iter() {
         status.apply_step(&step, &mut visited);
-        // println!("{:?}", visited);
-        // print(&status);
     }
-    visits(&visited);
     visited.len()
 }
 
 pub fn solution() -> String {
     let contents = include_str!("input.txt");
     let data = parse(contents);
-    format!("Problem 1: {}\nProblem 2: {}", problem_1(&data), 2)
+    format!("Problem 1: {}\nProblem 2: {}", problem_loop(&data, 1), problem_loop(&data, 9))
 }

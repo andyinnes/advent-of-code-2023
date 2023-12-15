@@ -12,6 +12,7 @@ mod day_11;
 mod day_12;
 mod day_13;
 mod day_14;
+mod day_15;
 
 pub fn runner(day: &String) -> String {
     if day == "1" {
@@ -46,6 +47,8 @@ pub fn runner(day: &String) -> String {
         format!("{}", day_13::solution())
     } else if day == "14" {
         format!("{}", day_14::solution())
+    } else if day == "15" {
+        format!("{}", day_15::solution())
     } else {
         format!("Unknown day input {day}")
     }

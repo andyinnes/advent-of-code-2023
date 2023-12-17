@@ -137,44 +137,33 @@ fn path_search(map: &Vec<Vec<Height>>, start: &Position, destination: &Position)
     i32::MAX
 }
 
-fn parse(contents: &str) -> (Vec<Vec<Height>>, Position, Position) {
+fn parse(contents: &str) -> (Vec<Vec<Height>>, Position, Position, Vec<Position>) {
     let mut output = vec![];
     let mut start = None;
     let mut end = None;
+    let mut all_starts = vec![];
     for (y, line) in contents.lines().enumerate() {
         let mut row = vec![];
         for (x, c) in line.chars().enumerate() {
             let value = Height::from(c);
-            if value == Height::Start {
-                start = Some(Position { x: x as i32, y: y as i32 });
-            } else if value == Height::End {
-                end = Some(Position { x: x as i32, y: y as i32 });
+            match value {
+                Height::Start => {
+                    let pos = Position { x: x as i32, y: y as i32 };
+                    start = Some(pos);
+                    all_starts.push(pos);
+                },
+                Height::End => {end = Some(Position { x: x as i32, y: y as i32 })},
+                Height::Mountain(height) => {
+                    if height == ('a' as i32) {
+                        all_starts.push(Position { x: x as i32, y: y as i32 });
+                    }
+                }
             }
             row.push(value);
         }
         output.push(row);
     }
-    (output, start.unwrap(), end.unwrap())
-}
-
-fn available_starts(map: &Vec<Vec<Height>>) -> Vec<Position> {
-    let mut output = vec![];
-    let a_height = 'a' as i32;
-    for y in 0..map.len() {
-        for x in 0..map[0].len() {
-            let current = map[y][x];
-            match current {
-                Height::Mountain(height) => {
-                    if height == a_height {
-                        output.push(Position {x: x as i32, y: y as i32 });
-                    }
-                },
-                Height::Start => output.push(Position {x: x as i32, y: y as i32 }),
-                _ => (),
-            }
-        }
-    }
-    output
+    (output, start.unwrap(), end.unwrap(), all_starts)
 }
 
 fn problem(map: &Vec<Vec<Height>>, starts: &[Position], destination: &Position) -> i32 {
@@ -187,8 +176,7 @@ fn problem(map: &Vec<Vec<Height>>, starts: &[Position], destination: &Position) 
 
 pub fn solution() -> String {
     let contents = include_str!("input.txt");
-    let (map, start, end) = parse(contents);
-    let all_starts = available_starts(&map);
+    let (map, start, end, all_starts) = parse(contents);
     format!("Problem 1: {}\nProblem 2: {}",
         problem(&map, &[start], &end),
         problem(&map, &all_starts, &end),

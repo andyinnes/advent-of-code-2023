@@ -180,34 +180,40 @@ fn problem_2(map: &Vec<Vec<i32>>) -> i32 {
         }
         // Right
         {
-            let mut new_state_opt = move_state(map, &state, 3);
-            for _ in 0..3 {
-                if new_state_opt.is_none() {
-                    break;
+            let new_direction = (state.in_direction + 3) % 4;
+            if apply_move(&state.position, &(MOVES[new_direction] * 4), map).is_some() {
+                let mut new_state_opt = move_state(map, &state, 3);
+                for _ in 0..3 {
+                    if new_state_opt.is_none() {
+                        break;
+                    }
+                    let current_state = new_state_opt.unwrap();
+                    new_state_opt = move_state(map, &current_state, 0);
                 }
-                let current_state = new_state_opt.unwrap();
-                new_state_opt = move_state(map, &current_state, 0);
-            }
-            if new_state_opt.is_some() {
-                let new_state = new_state_opt.unwrap();
-                let prio = new_state.heat_loss;
-                pq.push_increase(new_state, -prio);
+                if new_state_opt.is_some() {
+                    let new_state = new_state_opt.unwrap();
+                    let prio = new_state.heat_loss;
+                    pq.push_increase(new_state, -prio);
+                }
             }
         }
         // Left
         {
-            let mut new_state_opt = move_state(map, &state, 1);
-            for _ in 0..3 {
-                if new_state_opt.is_none() {
-                    break;
+            let new_direction = (state.in_direction + 3) % 4;
+            if apply_move(&state.position, &(MOVES[new_direction] * 4), map).is_some() {
+                let mut new_state_opt = move_state(map, &state, 1);
+                for _ in 0..3 {
+                    if new_state_opt.is_none() {
+                        break;
+                    }
+                    let current_state = new_state_opt.unwrap();
+                    new_state_opt = move_state(map, &current_state, 0);
                 }
-                let current_state = new_state_opt.unwrap();
-                new_state_opt = move_state(map, &current_state, 0);
-            }
-            if new_state_opt.is_some() {
-                let new_state = new_state_opt.unwrap();
-                let prio = new_state.heat_loss;
-                pq.push_increase(new_state, -prio);
+                if new_state_opt.is_some() {
+                    let new_state = new_state_opt.unwrap();
+                    let prio = new_state.heat_loss;
+                    pq.push_increase(new_state, -prio);
+                }
             }
         }
         // Straight
